@@ -18,7 +18,7 @@ The repo has minimal dependencies, most of which may already be installed if you
 4. `pycurl >= 7.43.0`
 5. `certifi >= 2020.4.5`
 
-**Please install any of the missing dependencies using a package manager of your choise before processding.**
+**Please install any of the missing dependencies using a package manager of your choise before proceeding.**
 
 ---
 

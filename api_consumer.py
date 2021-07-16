@@ -55,12 +55,12 @@ class DataLoader:
 
         self.STATES = {v.lower(): k for k, v in self.CODES.items()}
 
-        self.segments = ["confirmed", "recovered", "deceased", "tested", "vaccinated1", "vaccinated2"]
-        self.intervals = ["delta", "delta7", "total"]
-        self.ts_colnames = [x + '_' + y for x in self.intervals for y in self.segments]
+        # self.segments = ["confirmed", "recovered", "deceased", "tested", "vaccinated1", "vaccinated2"]
+        # self.intervals = ["delta", "delta7", "total"]
+        # self.ts_colnames = [x + '_' + y for x in self.intervals for y in self.segments]
 
         self.__all_timeseries_data = None
-        self.__all_daily_data = None
+        # self.__all_daily_data = None
 
     def search_state_code(self, state: str) -> typing.Dict[str, str]:
         """
