@@ -5,6 +5,10 @@ import certifi
 import typing
 import json
 import numpy as np
+import os
+import warnings
+import glob
+import datetime
 
 from io import BytesIO
 
@@ -61,6 +65,11 @@ class DataLoader:
 
         self.__all_timeseries_data = None
         # self.__all_daily_data = None
+        self.data_dir = os.path.join(
+            os.path.dirname(os.path.abspath('../../LICENSE')), 'data'
+        )
+
+        os.makedirs(self.data_dir, exist_ok=True)
 
     def search_state_code(self, state: str) -> typing.Dict[str, str]:
         """
@@ -85,7 +94,7 @@ class DataLoader:
         """
         return list(self.CODES.values())
 
-    def data(
+    def get_data(
         self,
         state_codes: typing.Union[str, typing.List[str]]="TT",
         data_type: str ='timeseries'
@@ -120,7 +129,7 @@ class DataLoader:
                 raise ValueError(f'None of the states {state_codes} found.')
             diff = list(set(state_codes) - set(state_codes_get))
             if len(diff) > 0:
-                raise UserWarning(f'States {diff} not found. Getting data for {state_codes_get} only.')
+                warnings.warn(f'States {diff} not found. Getting data for {state_codes_get} only.')
             return self.__states(state_codes_get, data_type)
         
         if state_codes.lower() == 'all':
@@ -142,8 +151,21 @@ class DataLoader:
             raise ValueError(f'Wrong data_type argument. Must be one of {self.API_TYPE_URL.keys()}')
 
         if data_type == 'timeseries':
-            if self.__all_timeseries_data is None:
+            body = None
+            
+            self.current_data_file = os.path.join(self.data_dir, f"st-{datetime.datetime.now().date()}.json")
+            if os.path.exists(self.current_data_file):
+                warnings.warn("Data is up-to-date. Using local files.")
+                f = open(self.current_data_file, 'r')
+                body = json.load(f)
+                f.close()
+            else:
                 body = self.__perform_curl(data_type)
+                f = open(self.current_data_file, 'w')
+                json.dump(body, f)
+                f.close()
+
+            if self.__all_timeseries_data is None:
                 self.__all_timeseries_data = self.__process_timeseries_payload(body)
             return self.__all_timeseries_data
         
