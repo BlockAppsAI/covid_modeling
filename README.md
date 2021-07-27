@@ -20,6 +20,8 @@ The repo has minimal dependencies, most of which may already be installed if you
 
 **Please install any of the missing dependencies using a package manager of your choise before proceeding.**
 
+To use the Python API, please see [this notebook](https://github.com/BlockAppsAI/covid_modeling/blob/5fb89c24f34d6e134eb515a7f7e3a8f9b23b4909/src/notebooks/test_api_consumer.ipynb)
+
 ---
 
 © [BlockApps AI Private Limited](https://blockappsai.com/)
