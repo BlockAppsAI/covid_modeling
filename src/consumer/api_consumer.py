@@ -1,3 +1,4 @@
+from cmath import nan
 import pycurl
 import urllib.parse as urlparse
 import pandas as pd
@@ -6,8 +7,8 @@ import typing
 import json
 import numpy as np
 import os
+import pathlib
 import warnings
-import glob
 import datetime
 
 from io import BytesIO
@@ -65,10 +66,14 @@ class DataLoader:
 
         self.__all_timeseries_data = None
         # self.__all_daily_data = None
-        self.data_dir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), 'data'
-        )
-
+        current_file_path = os.path.abspath(__file__)
+        path = pathlib.Path(current_file_path)
+        
+        self.data_dir = 'data'
+        for p in path.parents:
+            if str(p).endswith('covid_modeling'):
+                self.data_dir = os.path.join(p, self.data_dir)
+                break
         os.makedirs(self.data_dir, exist_ok=True)
 
     def search_state_code(self, state: str) -> typing.Dict[str, str]:
@@ -87,6 +92,10 @@ class DataLoader:
         return {key: val 
                 for key, val in self.STATES.items() 
                 if state.lower() in key}
+
+    def get_all_states_with_codes(self) -> typing.Dict[str, str]:
+        return {key: val 
+                for key, val in self.STATES.items()}
     
     def get_available_states(self) -> typing.List[str]:
         """
@@ -188,12 +197,25 @@ class DataLoader:
     def __process_timeseries_payload(self, payload: str) -> typing.Dict[str, pd.DataFrame]:
         data_dict = json.loads(payload)
 
-        # Hit the daily data endpoint for population inofrmation
-        payload = self.__perform_curl(data_type='daily')
-        daily_dict = json.loads(payload)
-        population = {key: value['meta']['population'] for key, value in daily_dict.items()}
+        self.population_data_file = os.path.join(self.data_dir, "state-population.json")
+
+        population = None
+        
+        if os.path.exists(self.population_data_file):
+            f = open(self.population_data_file, 'r')
+            population = json.loads(json.load(f))
+            f.close()
+        else:
+            payload = self.__perform_curl(data_type='daily')
+            daily_dict = json.loads(payload)
+            population = {key: value['meta']['population'] for key, value in daily_dict.items()}
+            population['UN'] = -1
+            f = open(self.population_data_file, 'w')
+            json.dump(json.dumps(population), f)
+            f.close()
+
         return {key: self.__state_ts_df(val['dates'], population[key]) 
-                    for key, val in data_dict.items() if key != 'UN'}
+                    for key, val in data_dict.items()}
 
     def __process_daily_payload(self, payload: str) -> typing.Dict[str, pd.DataFrame]:
         raise NotImplementedError("daily payload processing is not implemented in this version.")
@@ -203,7 +225,7 @@ class DataLoader:
         df['date'] = pd.to_datetime(pd.Series(state_dict.keys()))
         df['population'] = pd.Series(np.repeat(population, len(df)))
 
-        df_alt = pd.json_normalize([value for key, value in state_dict.items()])
+        df_alt = pd.json_normalize([value for _, value in state_dict.items()])
 
         return df.join(df_alt)
 
