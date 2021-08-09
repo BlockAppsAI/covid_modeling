@@ -1,4 +1,5 @@
 import sys
+import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -9,20 +10,34 @@ import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
+from flask import Flask, send_from_directory
+
 
 sys.path.append('..')
 from consumer.api_consumer import DataLoader
 from style import *
 from constants import *
 pio.renderers.default = "browser"
-
-
+server = Flask(__name__, static_folder='static')
 external_stylesheets = [dbc.themes.SANDSTONE]
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(server=server, external_stylesheets=external_stylesheets)
+# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app.title = "Covid Modelling | BlockApps AI"
 dl = DataLoader()
 states = dl.get_all_states_with_codes()
 codes = {value: key for key, value in states.items()}
 states = [{'label': key.title(), 'value': value} for key, value in states.items()]
+
+print(server.root_path)
+
+
+@server.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(server.root_path, 'static'),
+        'favicon.ico', 
+        mimetype='image/vnd.microsoft.icon'
+    )
 
 
 tab1_body = tab1_body = html.Div([
@@ -71,12 +86,12 @@ card = dbc.Card(
         dbc.CardHeader([
             dbc.Tabs(
                 [
-                    dbc.Tab(label="Daily Data", tab_id="tab-1", tab_style={"marginLeft": "auto"}),
-                    dbc.Tab(label="Analysis", tab_id="tab-2"),
+                    dbc.Tab(label="Analysis", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
+                    dbc.Tab(label="Daily Data", tab_id="tab-1"),
                 ],
                 id="card-tabs",
                 card=True,
-                active_tab="tab-1",
+                active_tab="tab-2",
             ),
         ],), # style={'background-color': colors['background']},),
         dbc.CardBody(tab1_body, id="card-content",),
@@ -88,11 +103,12 @@ app.layout = dbc.Container([
             style={'text-align': "center",
                     'color': colors['text'],
                   }),
-    html.P(
-        "(Data is updated every day at 10:00 AM.)",
-        style={'text-align': 'center',}
-    ),
+    html.Div([
+        "Data is updated every day at 10:00 AM from ",
+        dcc.Link(html.A("covid19india.org"), href="https://covid19india.org/")
+    ], style={'text-align': 'center',}),
     card,
+    html.Footer(dcc.Link(html.H5('© BlockApps AI'), href="https://blockappsai.com/")),
 ], fluid=True)
 
 
