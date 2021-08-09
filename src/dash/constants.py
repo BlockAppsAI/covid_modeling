@@ -20,8 +20,8 @@ column_dt = {
     'delta.vaccinated2': 'Daily Vaccinated 2',
     'delta7.vaccinated2': 'Daily Vaccinated 2 (7 Day Average)',
     'total.vaccinated2': 'Total Vaccinated 2',
-    'delta.tpr': 'Test Positivity Rate (%)',
-    'delta.cfr': 'Case Fatality Rate (%)'
+    # 'delta.tpr': 'Test Positivity Rate (%)',
+    # 'delta.cfr': 'Case Fatality Rate (%)'
 }
 
 dt_column = {
