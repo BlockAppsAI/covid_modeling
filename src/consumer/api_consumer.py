@@ -60,10 +60,6 @@ class DataLoader:
 
         self.STATES = {v.lower(): k for k, v in self.CODES.items()}
 
-        # self.segments = ["confirmed", "recovered", "deceased", "tested", "vaccinated1", "vaccinated2"]
-        # self.intervals = ["delta", "delta7", "total"]
-        # self.ts_colnames = [x + '_' + y for x in self.intervals for y in self.segments]
-
         self.__all_timeseries_data = None
         # self.__all_daily_data = None
         current_file_path = os.path.abspath(__file__)
@@ -176,6 +172,7 @@ class DataLoader:
 
             if self.__all_timeseries_data is None:
                 self.__all_timeseries_data = self.__process_timeseries_payload(body)
+
             return self.__all_timeseries_data
         
         if data_type == 'daily':
@@ -214,8 +211,12 @@ class DataLoader:
             json.dump(json.dumps(population), f)
             f.close()
 
-        return {key: self.__state_ts_df(val['dates'], population[key]) 
-                    for key, val in data_dict.items()}
+        out_dict = {key: self.__state_ts_df(val['dates'], population[key]) 
+                    for key, val in data_dict.items() if key != 'UN'}
+
+        return {
+            key: self.__compute_tpr_cfr(value) for key, value in out_dict.items()
+        }
 
     def __process_daily_payload(self, payload: str) -> typing.Dict[str, pd.DataFrame]:
         raise NotImplementedError("daily payload processing is not implemented in this version.")
@@ -234,6 +235,13 @@ class DataLoader:
 
     def get_all_daily(self):
         return self.__all(data_type='daily')
+
+
+    @staticmethod
+    def __compute_tpr_cfr(df: pd.DataFrame) -> pd.DataFrame:
+        df['tpr'] = 100 * df['delta.confirmed'] / df['delta.tested']
+        df['cfr'] = 100 * df['delta.deceased'] / df['delta.confirmed']
+        return df
 
 
 if __name__ == '__main__':

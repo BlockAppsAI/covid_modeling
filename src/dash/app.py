@@ -1,4 +1,3 @@
-import sys
 import os
 import dash
 import dash_core_components as dcc
@@ -12,23 +11,19 @@ from dash.exceptions import PreventUpdate
 
 from flask import Flask, send_from_directory
 
-
-sys.path.append('..')
-from consumer.api_consumer import DataLoader
+from data import *
 from style import *
-from constants import *
+
+from raw_data import tab1_body, column_dt
+from metrics import tab2_body
+from forecasts import tab3_body
+
+
 pio.renderers.default = "browser"
 server = Flask(__name__, static_folder='static')
 external_stylesheets = [dbc.themes.SANDSTONE]
 app = dash.Dash(server=server, external_stylesheets=external_stylesheets)
-# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Covid Modelling | BlockApps AI"
-dl = DataLoader()
-states = dl.get_all_states_with_codes()
-codes = {value: key for key, value in states.items()}
-states = [{'label': key.title(), 'value': value} for key, value in states.items()]
-
-print(server.root_path)
 
 
 @server.route('/favicon.ico')
@@ -40,58 +35,18 @@ def favicon():
     )
 
 
-tab1_body = tab1_body = html.Div([
-    dbc.Row([
-        dbc.Col(
-            dcc.Dropdown(
-                id='geography',
-                options=states,
-                value=['KA', 'KL', 'TN', 'MH', 'AP', 'TG'], 
-                multi=True,
-                placeholder="Select Geographies",
-                style={'vertical-align': 'middle', 'marginLeft': 'auto', 'align': 'inline-block'}
-            ), width={
-                "size": 6, 
-                'order': 'first',
-                'offset': 0,
-            }
-        ),
-        dbc.Col(
-            dcc.Dropdown(
-                id='metric',
-                options=dt_column_dd,
-                value='delta.confirmed',
-                placeholder="Select A Metric",
-                style={'vertical-align': 'middle', 'marginLeft': 'auto', 'align': 'inline-block'}
-            ), width={"size": 3, "offset": 0, 'order': 'last'},
-        ),
-    ], style={'marginTop': '0px', 'vertical-align': 'middle'}),
-
-    dbc.Spinner(
-        id="loading-1",
-        children=dcc.Graph(
-            id='geography-metric',
-            animate=False,
-            style={'width': '90hh', 'height': '75vh'}
-        ),
-        spinner_style={#"width": "5rem", "height": "5rem", 
-                       'color': "primary", 'type': "grow"},
-    ),
-])
-
-tab2_body = html.P("I am under construction.")
-
 card = dbc.Card(
     [
         dbc.CardHeader([
             dbc.Tabs(
                 [
-                    dbc.Tab(label="Analysis", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
-                    dbc.Tab(label="Daily Data", tab_id="tab-1"),
+                    dbc.Tab(label="Daily Metrics", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
+                    dbc.Tab(label='Forecasts', tab_id='tab-3'),
+                    dbc.Tab(label="Daily Raw Data", tab_id="tab-1"),
                 ],
                 id="card-tabs",
                 card=True,
-                active_tab="tab-2",
+                active_tab="tab-1",
             ),
         ],), # style={'background-color': colors['background']},),
         dbc.CardBody(tab1_body, id="card-content",),
@@ -99,7 +54,7 @@ card = dbc.Card(
 )
 
 app.layout = dbc.Container([
-    html.H1(children="Covid 19 India", 
+    html.H1(children="Covid 19 in India", 
             style={'text-align': "center",
                     'color': colors['text'],
                   }),
@@ -118,10 +73,16 @@ app.layout = dbc.Container([
     Input('metric', 'value')
 )
 def update_plots(geography, metric):
-    data = dl.get_data(state_codes=geography)
+    data = None
     fig = go.Figure()
-    if geography is None or metric is None:
-        raise PreventUpdate
+    try:
+        data = dl.get_data(state_codes=geography)
+    except ValueError:
+        return empty_data_dict
+
+    if data is None or metric is None:
+        # raise PreventUpdate
+        return empty_data_dict
     else:
         if isinstance(data, dict):
             for key, df in data.items():
@@ -134,7 +95,7 @@ def update_plots(geography, metric):
                     )
                 )
             fig.update_layout(
-                # title=column_dt[metric],
+                title=column_dt[metric],
                 **figure_params
             )
             fig.update_yaxes(
@@ -152,7 +113,7 @@ def update_plots(geography, metric):
                 )
             )
             fig.update_layout(
-                # title=column_dt[metric],
+                title=column_dt[metric],
                 **figure_params
             )
             fig.update_yaxes(
@@ -172,6 +133,8 @@ def tab_content(active_tab):
         return tab2_body
     elif active_tab == 'tab-1':
         return tab1_body
+    elif active_tab == 'tab-3':
+        return tab3_body
 
 
 if __name__ == '__main__':

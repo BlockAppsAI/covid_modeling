@@ -38,6 +38,7 @@ xaxis = dict(
     ),
     type="date",
     autorange=False,
+    showgrid=False,
     range=[datetime.datetime.now().date() - datetime.timedelta(days=30), datetime.datetime.now().date()]
 )
 
@@ -48,6 +49,7 @@ yaxis = {
     'showline': True,
     'tickmode': 'auto',
     'rangemode': 'tozero',
+    'showgrid': False,
 }
 
 plot_margins = dict(
@@ -65,7 +67,7 @@ figure_params = {
 }
 
 scatter_style = {
-    'mode': 'markers+lines',
+    'mode': 'markers+lines+text',
     'marker': {
         # 'color': colors['lines'],
         'size': 8,
@@ -75,4 +77,26 @@ scatter_style = {
         # "color": colors['lines']
     },
     'showlegend': True,
+}
+
+empty_data_dict = {
+    "layout": {
+        "xaxis": {
+            "visible": False
+        },
+        "yaxis": {
+            "visible": False
+        },
+        "annotations": [
+            {
+                "text": "No matching data found",
+                "xref": "paper",
+                "yref": "paper",
+                "showarrow": False,
+                "font": {
+                    "size": 28
+                }
+            }
+        ]
+    }
 }
