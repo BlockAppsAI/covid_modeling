@@ -6,7 +6,7 @@ from data import *
 
 
 column_dt = {
-    'rt': 'Reproduction Number - R0(t)'
+    'rt': 'Reproduction Number - R0(t)',
     'dt': 'Doubling Time',
 }
 
