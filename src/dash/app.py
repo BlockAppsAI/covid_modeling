@@ -40,7 +40,7 @@ card = dbc.Card(
         dbc.CardHeader([
             dbc.Tabs(
                 [
-                    dbc.Tab(label="Daily Metrics", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
+                    dbc.Tab(label="Spread Parameters", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
                     dbc.Tab(label='Forecasts', tab_id='tab-3'),
                     dbc.Tab(label="Daily Raw Data", tab_id="tab-1"),
                 ],

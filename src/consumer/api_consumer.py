@@ -1,4 +1,3 @@
-from cmath import nan
 import pycurl
 import urllib.parse as urlparse
 import pandas as pd
@@ -230,7 +229,7 @@ class DataLoader:
 
         return df.join(df_alt)
 
-    def get_all_timeseries(self):
+    def get_all_timeseries(self) -> typing.Dict[pd.DataFrame]:
         return self.__all(data_type='timeseries')
 
     def get_all_daily(self):
