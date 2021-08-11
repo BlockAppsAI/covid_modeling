@@ -229,7 +229,7 @@ class DataLoader:
 
         return df.join(df_alt)
 
-    def get_all_timeseries(self) -> typing.Dict[pd.DataFrame]:
+    def get_all_timeseries(self):
         return self.__all(data_type='timeseries')
 
     def get_all_daily(self):
