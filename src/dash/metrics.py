@@ -6,9 +6,8 @@ from data import *
 
 
 column_dt = {
-    'tpr': 'Test Positivity Rate',
-    'cfr': 'Case Fatality Rate',
-    'rt': 'Reproduction Number - Ro(t)'
+    'rt': 'Reproduction Number - R0(t)'
+    'dt': 'Doubling Time',
 }
 
 dt_column = {
@@ -27,7 +26,7 @@ tab2_body = html.Div([
             dcc.Dropdown(
                 id='geography',
                 options=states,
-                value=['KA', 'KL', 'TN', 'MH', 'AP', 'TG'], 
+                value=['KA'], #'KL', 'TN', 'MH', 'AP', 'TG'], 
                 multi=True,
                 placeholder="Select Geographies",
                 style={'vertical-align': 'middle', 'marginLeft': 'auto', 'align': 'inline-block'}

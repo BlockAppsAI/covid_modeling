@@ -47,7 +47,7 @@ tab1_body = tab1_body = html.Div([
             dcc.Dropdown(
                 id='geography',
                 options=states,
-                value=['KA', 'KL', 'TN', 'MH', 'AP', 'TG'], 
+                value=['KA'], #'KL', 'TN', 'MH', 'AP', 'TG'], 
                 multi=True,
                 placeholder="Select Geographies",
                 style={'vertical-align': 'middle', 'marginLeft': 'auto', 'align': 'inline-block'}
