@@ -62,7 +62,7 @@ tab1_body = tab1_body = html.Div([
             dcc.Dropdown(
                 id='metric',
                 options=dt_column_dd,
-                value='tpr',
+                value='rt',
                 placeholder="Select A Metric",
                 style={'vertical-align': 'middle', 'marginLeft': 'auto', 'align': 'inline-block'}
             ), width={"size": 3, "offset": 0, 'order': 'last'},

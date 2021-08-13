@@ -115,7 +115,7 @@ def get_rt(geography, metric):
     )
     fig.update_xaxes(rangeslider_thickness=0.05)
 
-    fig.add_hline(y=1.0)
+    fig.add_hline(y=1.0, line_dash='dash')
 
     return fig
 
