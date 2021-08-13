@@ -79,6 +79,19 @@ scatter_style = {
     'showlegend': True,
 }
 
+rt_scatter_style = {
+    'mode': 'lines+text',
+    'marker': {
+        # 'color': colors['lines'],
+        'size': 8,
+    },
+    'line': {
+        "width": 2.0,
+        # "color": colors['lines']
+    },
+    'showlegend': True,
+}
+
 empty_data_dict = {
     "layout": {
         "xaxis": {

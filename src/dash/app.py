@@ -3,6 +3,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from matplotlib.pyplot import get
 import plotly.express as px
 import plotly.io as pio
 import plotly.graph_objects as go
@@ -14,8 +15,7 @@ from flask import Flask, send_from_directory
 from data import *
 from style import *
 
-from raw_data import tab1_body, column_dt
-from metrics import tab2_body
+from metrics import tab1_body, column_dt
 from forecasts import tab3_body
 
 
@@ -40,9 +40,8 @@ card = dbc.Card(
         dbc.CardHeader([
             dbc.Tabs(
                 [
-                    dbc.Tab(label="Spread Parameters", tab_id="tab-2", tab_style={"marginLeft": "auto"}),
+                    dbc.Tab(label="Metrics", tab_id="tab-1", tab_style={"marginLeft": "auto"}),
                     dbc.Tab(label='Forecasts', tab_id='tab-3'),
-                    dbc.Tab(label="Daily Raw Data", tab_id="tab-1"),
                 ],
                 id="card-tabs",
                 card=True,
@@ -67,14 +66,71 @@ app.layout = dbc.Container([
 ], fluid=True)
 
 
+def get_rt(geography, metric):
+    fig = go.Figure()
+    try:
+        data = rtdl.load_rt(state_codes=geography)
+    except ValueError:
+        return empty_data_dict
+    
+    if isinstance(data, dict):
+        for key, df in data.items():
+            fig.add_trace(
+                go.Scatter(
+                    x=df['date'],
+                    y=df['Q0.5'],
+                    **rt_scatter_style,
+                    name=codes[key]
+                ),
+                # go.Scatter(
+                #     x=df['date'], # x, then x reversed
+                #     y=df['Q0.975'] + df['Q0.025'][::-1], # upper, then lower reversed
+                #     fill='toself',
+                #     showlegend=False
+                # )
+            )
+    else:
+        fig.add_trace(
+            go.Scatter(
+                x=data['date'],
+                y=data['Q0.5'],
+                **rt_scatter_style,
+                name=codes[geography]
+            ),
+            # go.Scatter(
+            #     x=df['date'] + df['date'][::-1], # x, then x reversed
+            #     y=df['Q0.975'] + df['Q0.025'][::-1], # upper, then lower reversed
+            #     fill='toself',
+            #     showlegend=False
+            # )
+        )
+    
+    fig.update_layout(
+        title=column_dt[metric],
+        **figure_params
+    )
+    fig.update_yaxes(
+        autorange=True,
+        fixedrange=False
+    )
+    fig.update_xaxes(rangeslider_thickness=0.05)
+
+    fig.add_hline(y=1.0)
+
+    return fig
+
+
 @app.callback(
     Output('geography-metric', 'figure'),
     Input('geography', 'value'),
     Input('metric', 'value')
 )
 def update_plots(geography, metric):
-    data = None
+    if metric == 'rt':
+        return get_rt(geography, metric)
+
     fig = go.Figure()
+    data = None
     try:
         data = dl.get_data(state_codes=geography)
     except ValueError:
@@ -94,15 +150,6 @@ def update_plots(geography, metric):
                         name=codes[key]
                     )
                 )
-            fig.update_layout(
-                title=column_dt[metric],
-                **figure_params
-            )
-            fig.update_yaxes(
-                autorange=True,
-                fixedrange=False
-            )
-            fig.update_xaxes(rangeslider_thickness=0.05)
         else:
             fig.add_trace(
                 go.Scatter(
@@ -112,15 +159,16 @@ def update_plots(geography, metric):
                     name=codes[geography]
                 )
             )
-            fig.update_layout(
-                title=column_dt[metric],
-                **figure_params
-            )
-            fig.update_yaxes(
-                autorange=True,
-                fixedrange=False
-            )
-            fig.update_xaxes(rangeslider_thickness=0.05)
+        
+        fig.update_layout(
+            title=column_dt[metric],
+            **figure_params
+        )
+        fig.update_yaxes(
+            autorange=True,
+            fixedrange=False
+        )
+        fig.update_xaxes(rangeslider_thickness=0.05)
 
         return fig
 
@@ -129,9 +177,7 @@ def update_plots(geography, metric):
     Output("card-content", "children"), [Input("card-tabs", "active_tab")]
 )
 def tab_content(active_tab):
-    if active_tab == 'tab-2':
-        return tab2_body
-    elif active_tab == 'tab-1':
+    if active_tab == 'tab-1':
         return tab1_body
     elif active_tab == 'tab-3':
         return tab3_body

@@ -142,5 +142,3 @@ cython_debug/
 lightning_logs
 out
 notebooks
-data/*.json
-data/*.csv
