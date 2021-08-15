@@ -15,7 +15,7 @@ from io import BytesIO
 
 class DataLoader:
     """
-    Implements methods to fetch data from https://api.covid19india.org/ for 
+    Implements methods to fetch data from https://data.covid19india.org/ for 
     states/country, timeseries/daily as pandas DataFrame or a dictionary of 
     DataFrames.
 
@@ -34,7 +34,7 @@ class DataLoader:
     >>> dl = DataLoader()
     """
     def __init__(self) -> None:
-        BASE_URL = 'https://api.covid19india.org/v4/min/'
+        BASE_URL = 'https://data.covid19india.org/v4/min/'
         self.API_TYPE_URL = {
             'timeseries': urlparse.urljoin(BASE_URL, 'timeseries.min.json'),
             'daily': urlparse.urljoin(BASE_URL, 'data.min.json'),

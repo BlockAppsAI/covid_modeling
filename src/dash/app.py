@@ -75,43 +75,101 @@ def get_rt(geography, metric):
     
     if isinstance(data, dict):
         for key, df in data.items():
-            fig.add_trace(
+            fig.add_traces([
                 go.Scatter(
                     x=df['date'],
                     y=df['Q0.5'],
                     **rt_scatter_style,
                     name=codes[key]
                 ),
-                # go.Scatter(
-                #     x=df['date'], # x, then x reversed
-                #     y=df['Q0.975'] + df['Q0.025'][::-1], # upper, then lower reversed
-                #     fill='toself',
-                #     showlegend=False
-                # )
-            )
+                go.Scatter(
+                    name="R(t) 95% upper",
+                    x=df['date'],
+                    y=df['Q0.975'],
+                    mode='lines',
+                    showlegend=False,
+                    line=dict(width=0),
+                ),
+                go.Scatter(
+                    name="R(t) 95% lower",
+                    x=df['date'],
+                    y=df['Q0.025'],
+                    mode='lines',
+                    showlegend=False,
+                    fill='tonexty',
+                    line=dict(width=0),
+                ),
+                go.Scatter(
+                    name="R(t) 50% upper",
+                    x=df['date'],
+                    y=df['Q0.75'],
+                    mode='lines',
+                    showlegend=False,
+                    line=dict(width=0),
+                ),
+                go.Scatter(
+                    name="R(t) 50% lower",
+                    x=df['date'],
+                    y=df['Q0.25'],
+                    mode='lines',
+                    showlegend=False,
+                    fill='tonexty',
+                    line=dict(width=0),
+                ),
+            ])
     else:
-        fig.add_trace(
+        fig.add_traces([
             go.Scatter(
                 x=data['date'],
                 y=data['Q0.5'],
                 **rt_scatter_style,
                 name=codes[geography]
             ),
-            # go.Scatter(
-            #     x=df['date'] + df['date'][::-1], # x, then x reversed
-            #     y=df['Q0.975'] + df['Q0.025'][::-1], # upper, then lower reversed
-            #     fill='toself',
-            #     showlegend=False
-            # )
-        )
+            go.Scatter(
+                name="R(t) 95% upper",
+                x=data['date'],
+                y=data['Q0.975'],
+                mode='lines',
+                showlegend=False,
+                line=dict(width=0),
+            ),
+            go.Scatter(
+                name="R(t) 95% lower",
+                x=data['date'],
+                y=data['Q0.025'],
+                mode='lines',
+                showlegend=False,
+                fill='tonexty',
+                line=dict(width=0),
+            ),
+            go.Scatter(
+                name="R(t) 50% upper",
+                x=data['date'],
+                y=data['Q0.75'],
+                mode='lines',
+                showlegend=False,
+                line=dict(width=0),
+            ),
+            go.Scatter(
+                name="R(t) 50% lower",
+                x=data['date'],
+                y=data['Q0.25'],
+                mode='lines',
+                showlegend=False,
+                fill='tonexty',
+                line=dict(width=0),
+            ),
+        ])
     
     fig.update_layout(
         title=column_dt[metric],
-        **figure_params
+        **figure_params,
+        yaxis_title='R(t) with 95%-CI',
     )
     fig.update_yaxes(
         autorange=True,
-        fixedrange=False
+        fixedrange=False,
+
     )
     fig.update_xaxes(rangeslider_thickness=0.05)
 

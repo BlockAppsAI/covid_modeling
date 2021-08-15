@@ -80,6 +80,7 @@ class RtDataLoader:
 
 
 if __name__ == '__main__':
-    rtc = RtDataLoader()
-    # rtc.compute_rt()
-    print(rtc.load_rt(['KA']))
+    rtc = RtCalculator()
+    rtdl = RtDataLoader()
+    rtc.compute_rt()
+    print(rtdl.load_rt(['KA']))
