@@ -21,7 +21,7 @@ from forecasts import tab3_body
 
 pio.renderers.default = "browser"
 server = Flask(__name__, static_folder='static')
-external_stylesheets = [dbc.themes.SANDSTONE]
+external_stylesheets = [dbc.themes.UNITED]
 app = dash.Dash(server=server, external_stylesheets=external_stylesheets)
 app.title = "Covid Modelling | BlockApps AI"
 
@@ -169,11 +169,9 @@ def get_rt(geography, metric):
     fig.update_yaxes(
         autorange=True,
         fixedrange=False,
-
     )
     fig.update_xaxes(rangeslider_thickness=0.05)
-
-    fig.add_hline(y=1.0, line_dash='dash')
+    fig.add_hline(y=1.0, line_dash='dash', line_width=3.0)
 
     return fig
 
