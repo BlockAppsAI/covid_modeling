@@ -83,7 +83,7 @@ def get_rt(geography, metric):
                     name=codes[key]
                 ),
                 go.Scatter(
-                    name="R(t) 95% upper",
+                    name="R(t) 95% upper" + codes[key],
                     x=df['date'],
                     y=df['Q0.975'],
                     mode='lines',
@@ -91,7 +91,7 @@ def get_rt(geography, metric):
                     line=dict(width=0),
                 ),
                 go.Scatter(
-                    name="R(t) 95% lower",
+                    name="R(t) 95% lower" + codes[key],
                     x=df['date'],
                     y=df['Q0.025'],
                     mode='lines',
@@ -100,7 +100,7 @@ def get_rt(geography, metric):
                     line=dict(width=0),
                 ),
                 go.Scatter(
-                    name="R(t) 50% upper",
+                    name="R(t) 50% upper" + codes[key],
                     x=df['date'],
                     y=df['Q0.75'],
                     mode='lines',
@@ -108,7 +108,7 @@ def get_rt(geography, metric):
                     line=dict(width=0),
                 ),
                 go.Scatter(
-                    name="R(t) 50% lower",
+                    name="R(t) 50% lower" + codes[key],
                     x=df['date'],
                     y=df['Q0.25'],
                     mode='lines',
@@ -126,7 +126,7 @@ def get_rt(geography, metric):
                 name=codes[geography]
             ),
             go.Scatter(
-                name="R(t) 95% upper",
+                name="R(t) 95% upper" + codes[key],
                 x=data['date'],
                 y=data['Q0.975'],
                 mode='lines',
@@ -134,7 +134,7 @@ def get_rt(geography, metric):
                 line=dict(width=0),
             ),
             go.Scatter(
-                name="R(t) 95% lower",
+                name="R(t) 95% lower" + codes[key],
                 x=data['date'],
                 y=data['Q0.025'],
                 mode='lines',
@@ -143,7 +143,7 @@ def get_rt(geography, metric):
                 line=dict(width=0),
             ),
             go.Scatter(
-                name="R(t) 50% upper",
+                name="R(t) 50% upper" + codes[key],
                 x=data['date'],
                 y=data['Q0.75'],
                 mode='lines',
@@ -151,7 +151,7 @@ def get_rt(geography, metric):
                 line=dict(width=0),
             ),
             go.Scatter(
-                name="R(t) 50% lower",
+                name="R(t) 50% lower" + codes[key],
                 x=data['date'],
                 y=data['Q0.25'],
                 mode='lines',
@@ -164,7 +164,7 @@ def get_rt(geography, metric):
     fig.update_layout(
         title=column_dt[metric],
         **figure_params,
-        yaxis_title='R(t) with 95%-CI',
+        yaxis_title='R(t) with 95%-CI and 50%-CI',
     )
     fig.update_yaxes(
         autorange=True,
