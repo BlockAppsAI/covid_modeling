@@ -35,6 +35,13 @@ tab2_content = dbc.Container(children=[
     dbc.ListGroup([
         dbc.ListGroupItem(
             [
+                dbc.ListGroupItemHeading("Versions"),
+                dbc.ListGroupItemText("Dashboard: 0,2"),
+                dbc.ListGroupItemText("Modeling: 0.9")
+            ]
+        ),
+        dbc.ListGroupItem(
+            [
                 dbc.ListGroupItemHeading("Comping Up"),
                 html.Hr(),
                 *formatted_todo
