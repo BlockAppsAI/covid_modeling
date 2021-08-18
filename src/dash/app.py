@@ -17,6 +17,7 @@ from style import *
 
 from metrics import tab1_body, column_dt
 from forecasts import tab3_body
+from readme import tab2_body
 
 
 pio.renderers.default = "browser"
@@ -34,22 +35,19 @@ def favicon():
         mimetype='image/vnd.microsoft.icon'
     )
 
-
-card = dbc.Card(
-    [
-        dbc.CardHeader([
-            dbc.Tabs(
-                [
-                    dbc.Tab(label="Metrics", tab_id="tab-1", tab_style={"marginLeft": "auto"}),
-                    dbc.Tab(label='Forecasts', tab_id='tab-3'),
-                ],
-                id="card-tabs",
-                card=True,
-                active_tab="tab-1",
-            ),
-        ],), # style={'background-color': colors['background']},),
-        dbc.CardBody(tab1_body, id="card-content",),
-    ],
+tabs = html.Div([
+        dbc.Tabs(
+            [
+                dbc.Tab(label="Metrics", tab_id="tab-1", tab_style={"marginLeft": "auto"}),
+                dbc.Tab(label='KA Forecasts', tab_id='tab-3'),
+                dbc.Tab(label='Read Me', tab_id='tab-2'),
+            ],
+            id="tabs",
+            card=True,
+            active_tab="tab-2",
+        ),
+        html.Div(id="content"),
+    ]
 )
 
 app.layout = dbc.Container([
@@ -58,10 +56,10 @@ app.layout = dbc.Container([
                     'color': colors['text'],
                   }),
     html.Div([
-        "Data is updated every day at 10:00 AM from ",
+        "Raw Data is updated every day at 12:00 noon from ",
         dcc.Link(html.A("covid19india.org"), href="https://covid19india.org/")
     ], style={'text-align': 'center',}),
-    card,
+    tabs,
     html.Footer(dcc.Link(html.H5('© BlockApps AI'), href="https://blockappsai.com/")),
 ], fluid=True)
 
@@ -229,14 +227,45 @@ def update_plots(geography, metric):
         return fig
 
 
+# @app.callback(
+#     Output('daily-confirmed', 'figure'),
+#     Output('daily-deceased', 'figure'),
+#     Input("active_tab", "content"),
+# )
+# def update_forecast_plots():
+#     df_forecasts = fl.get_forecasts()
+#     df_daily = dl.get_data('KA')
+
+#     fig1 = go.Figure()
+#     fig2 = go.Figure()
+#     fig1.add_traces([
+#         go.Scatter(
+#             x=df_forecasts['date'],
+#             y=df_forecasts['daily confirmed'],
+#             name='Confirmed Cases Forecast'
+#             **scatter_style
+#         ),
+#         go.Scatter(
+#             x=df_daily['date'],
+#             y=df_daily['delta.confirmed'],
+#             name='Confirmed Cases Actual'
+#             **scatter_style
+#         )
+#     ])
+
+#     return fig1, None
+
+
 @app.callback(
-    Output("card-content", "children"), [Input("card-tabs", "active_tab")]
+    Output("content", "children"), [Input("tabs", "active_tab")]
 )
 def tab_content(active_tab):
     if active_tab == 'tab-1':
         return tab1_body
     elif active_tab == 'tab-3':
         return tab3_body
+    elif active_tab == 'tab-2':
+        return tab2_body
 
 
 if __name__ == '__main__':

@@ -42,7 +42,7 @@ dt_column_dd = [{
 } for key, value in column_dt.items()]
 
 
-tab1_body = tab1_body = html.Div([
+tab1_content = html.Div([
     dbc.Row([
         dbc.Col(
             dcc.Dropdown(
@@ -80,3 +80,11 @@ tab1_body = tab1_body = html.Div([
                        'color': "primary", 'type': "grow"},
     ),
 ])
+
+tab1_body = dbc.Card(
+    dbc.CardBody(
+        [
+            tab1_content
+        ]
+    ),
+)

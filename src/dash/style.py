@@ -37,9 +37,9 @@ xaxis = dict(
         visible=True,
     ),
     type="date",
-    autorange=True,
+    autorange=False,
     showgrid=False,
-    range=[datetime.datetime.now().date() - datetime.timedelta(days=30), datetime.datetime.now().date()]
+    range=[datetime.datetime.now().date() - datetime.timedelta(days=30), datetime.datetime.now().date() + datetime.timedelta(days=7)]
 )
 
 yaxis = {
