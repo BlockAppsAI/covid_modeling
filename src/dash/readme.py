@@ -1,8 +1,59 @@
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from torch import special
 
-tab2_content = html.P("Research and Development details will be published here.")
+researchers = [
+    "Dr. Vishal Rao: Head of Surgical Oncology @ HCG, Bangalore",
+    "Ashish Kumar Anshu: Research Engineer @ BlockApps AI, Bangalore",
+    "Ritesh Kumar Dubey: Assoc. Professor @ SRM-IST Research Institute, Chennai",
+    "Bhupendra Gupta: Asst. Professor @ IIITDM Jabalpur",
+    "Subhabrata Pal: Head of Medtech @ BlockApps AI, Bangalore",
+    "Anupam Gupta: Research Scientist and CTO @ BlockApps AI, Bangalore"
+]
+
+special = [
+    "Dr. Ambujam Nair Kapoor: Advisor @ BlockApps AI and Ex-Senior DDG, ICMR Delhi",
+    "Srikar Y.: Advisor @ BlockApps AI",
+    "Sridhar Y.: Head of Operations and CEO @ BlockApps AI"
+]
+
+formatted1 = list(map(dbc.ListGroupItemText, researchers))
+formatted2 = list(map(dbc.ListGroupItemText, special))
+
+tab2_content = dbc.Container(children=[
+    dbc.ListGroup([
+        dbc.ListGroupItem(
+            [
+                dbc.ListGroupItemHeading("Bibliography"),
+                dbc.ListGroupItemText("To be published"),
+
+                dbc.ListGroupItemHeading("Code"),
+                dbc.ListGroupItemText("To be published under GPLv3 License"),
+            ]
+        ),
+        dbc.ListGroupItem(
+            [
+                dbc.ListGroupItemHeading("Our Manuscripts and Publications"),
+                dbc.ListGroupItemText("To be published"),
+            ]
+        ),
+        dbc.ListGroupItem(
+            [
+                dbc.ListGroupItemHeading("Research Team"),
+                html.Hr(),
+                *formatted1
+            ]
+        ),
+        dbc.ListGroupItem(
+            [
+                dbc.ListGroupItemHeading("Special Mention"),
+                html.Hr(),
+                *formatted2
+            ]
+        ),
+    ])
+])
 
 tab2_body = tab1_body = dbc.Card(
     dbc.CardBody(
