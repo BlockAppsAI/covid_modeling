@@ -18,18 +18,35 @@ special = [
     "Sridhar Y.: Head of Operations and CEO @ BlockApps AI"
 ]
 
+todo = [
+    "- Scenario Analysis based on our modified SEIRDV model",
+    "- Multiple horizon forecasts (7/14/21 days)",
+    "- All Indian states forecasts",
+    "- District-wise metric for Karnataka",
+    "- Adjusting forecasts using mubility data",
+    "- Peak Prediction"
+]
+
 formatted1 = list(map(dbc.ListGroupItemText, researchers))
 formatted2 = list(map(dbc.ListGroupItemText, special))
+formatted_todo = list(map(dbc.ListGroupItemText, todo))
 
 tab2_content = dbc.Container(children=[
     dbc.ListGroup([
+        dbc.ListGroupItem(
+            [
+                dbc.ListGroupItemHeading("Comping Up"),
+                html.Hr(),
+                *formatted_todo
+            ]
+        ),
         dbc.ListGroupItem(
             [
                 dbc.ListGroupItemHeading("Bibliography"),
                 dbc.ListGroupItemText("To be published"),
 
                 dbc.ListGroupItemHeading("Code"),
-                dbc.ListGroupItemText("To be published under GPLv3 License"),
+                dbc.ListGroupItemText("To be published under GNU GPLv3 License"),
             ]
         ),
         dbc.ListGroupItem(
