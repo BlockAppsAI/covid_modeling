@@ -84,7 +84,7 @@ tab1_content = html.Div([
 tab1_body = dbc.Card(
     dbc.CardBody(
         [
-            tab1_content
+            tab1_content,
         ]
     ),
 )

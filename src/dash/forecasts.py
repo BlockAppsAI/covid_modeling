@@ -1,3 +1,4 @@
+from cmd2 import style
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
@@ -87,5 +88,9 @@ tab3_content = html.Div([
 ], id='tab3-content')
 
 tab3_body = dbc.Card(
-    dbc.CardBody([tab3_content], id='tab3-body'),
+    dbc.CardBody([
+        tab3_content,
+        html.Hr(),
+        html.P("** Not showing Credible Intervals for clarity.", style={"text-style": "bold"})
+    ], id='tab3-body'),
 )
