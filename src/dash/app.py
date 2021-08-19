@@ -44,7 +44,7 @@ tabs = html.Div([
             ],
             id="tabs",
             card=True,
-            active_tab="tab-3",
+            active_tab="tab-1",
         ),
         html.Div(id="content"),
     ]
