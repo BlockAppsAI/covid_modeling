@@ -23,7 +23,7 @@ todo = [
     "- Multiple horizon forecasts (7/14/21 days)",
     "- All Indian states forecasts",
     "- District-wise metric for Karnataka",
-    "- Adjusting forecasts using mubility data",
+    "- Adjusting forecasts using mobility data",
     "- Peak Prediction"
 ]
 

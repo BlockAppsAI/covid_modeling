@@ -30,7 +30,7 @@ app.title = "Covid Modelling | BlockApps AI"
 @server.route('/favicon.ico')
 def favicon():
     return send_from_directory(
-        os.path.join(server.root_path, 'static'),
+        os.path.join(server.root_path, 'assets'),
         'favicon.ico', 
         mimetype='image/vnd.microsoft.icon'
     )

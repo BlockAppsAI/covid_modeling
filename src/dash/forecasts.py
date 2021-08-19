@@ -10,6 +10,9 @@ from style import *
 
 df_forecasts = fl.get_forecasts()
 df_daily = dl.get_data('KA')
+# df_daily.drop(df_daily.columns.difference(['date', 'delta.confirmed', 'delta.deceased']), axis=1, inplace=True)
+figure_params_forecasts = figure_params.copy()
+figure_params_forecasts['xaxis'] = xaxis
 
 fig1 = go.Figure()
 fig1.add_traces([
@@ -26,7 +29,7 @@ fig1.add_traces([
         **scatter_style
     )
 ])
-fig1.update_layout(xaxis=xaxis)
+fig1.update_layout(**figure_params_forecasts)
 
 fig2 = go.Figure()
 fig2.add_traces([
@@ -43,7 +46,7 @@ fig2.add_traces([
         **scatter_style
     )
 ])
-fig2.update_layout(xaxis=xaxis)
+fig2.update_layout(**figure_params_forecasts)
 
 
 tab3_content = html.Div([
