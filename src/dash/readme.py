@@ -4,10 +4,10 @@ import dash_bootstrap_components as dbc
 from torch import special
 
 researchers = [
-    "Dr. Vishal Rao: Head of Surgical Oncology @ HCG, Bangalore",
+    "Dr. Vishal Rao: Dean Academic @ HCG, Bangalore",
     "Ashish Kumar Anshu: Research Engineer @ BlockApps AI, Bangalore",
-    "Ritesh Kumar Dubey: Assoc. Professor @ SRM-IST Research Institute, Chennai",
     "Bhupendra Gupta: Asst. Professor @ IIITDM Jabalpur",
+    "Ritesh Kumar Dubey: Assoc. Professor @ SRM-IST Research Institute, Chennai",
     "Subhabrata Pal: Head of Medtech @ BlockApps AI, Bangalore",
     "Anupam Gupta: Research Scientist and CTO @ BlockApps AI, Bangalore"
 ]
