@@ -32,6 +32,10 @@ formatted2 = list(map(dbc.ListGroupItemText, special))
 formatted_todo = list(map(dbc.ListGroupItemText, todo))
 
 tab2_content = dbc.Container(children=[
+    html.Div([
+        "Raw Data is updated every day at 12:00 noon from ",
+        dcc.Link(html.A("covid19india.org"), href="https://covid19india.org/")
+    ], style={'text-align': 'center',}),
     dbc.ListGroup([
         dbc.ListGroupItem(
             [

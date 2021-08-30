@@ -18,12 +18,14 @@ from style import *
 from metrics import tab1_body, column_dt
 from forecasts import tab3_body
 from readme import tab2_body
+from navbar import navbar
 
 
 pio.renderers.default = "browser"
 server = Flask(__name__, static_folder='static')
-external_stylesheets = [dbc.themes.UNITED]
-app = dash.Dash(server=server, external_stylesheets=external_stylesheets)
+external_stylesheets = [dbc.themes.SIMPLEX]
+app = dash.Dash(server=server, external_stylesheets=external_stylesheets,
+                suppress_callback_exceptions=True)
 app.title = "Covid Modelling | BlockApps AI"
 
 
@@ -43,25 +45,20 @@ tabs = html.Div([
                 dbc.Tab(label='Read Me', tab_id='tab-2'),
             ],
             id="tabs",
-            card=True,
+            # card=True,
             active_tab="tab-1",
+            persistence=True,
+            persistence_type='local',
         ),
         html.Div(id="content"),
     ]
 )
 
-app.layout = dbc.Container([
-    html.H1(children="Covid 19 in India", 
-            style={'text-align': "center",
-                    'color': colors['text'],
-                  }),
-    html.Div([
-        "Raw Data is updated every day at 12:00 noon from ",
-        dcc.Link(html.A("covid19india.org"), href="https://covid19india.org/")
-    ], style={'text-align': 'center',}),
+app.layout = html.Div([
+    navbar,
     tabs,
-    html.Footer(dcc.Link(html.H5('© BlockApps AI'), href="https://blockappsai.com/")),
-], fluid=True)
+    # html.Footer(dcc.Link(html.H5('© BlockApps AI'), href="https://blockappsai.com/")),
+])#, fluid=True)
 
 
 def get_rt(geography, metric):
