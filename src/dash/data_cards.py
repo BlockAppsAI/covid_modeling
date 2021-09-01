@@ -25,20 +25,3 @@ cards = dbc.Row(
         dbc.Col(dbc.Card(card_content, id='vaccine-4')),
     ]
 )
-
-# cards = html.Div(
-#     [
-#         dbc.Row(
-#             [
-#                 dbc.Col(dbc.Card(card_content, color="light")),
-#                 dbc.Col(dbc.Card(card_content, color="dark", inverse=True)),
-#             ]
-#         ),
-#         dbc.Row(
-#             [
-#                 dbc.Col(dbc.Card(card_content, color="dark")),
-#                 dbc.Col(dbc.Card(card_content, color="light", inverse=True)),
-#             ]
-#         ),
-#     ]
-# )
