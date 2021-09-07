@@ -60,6 +60,7 @@ class DataLoader:
         self.STATES = {v.lower(): k for k, v in self.CODES.items()}
 
         self.__all_timeseries_data = None
+        self.__daily_df = None
         # self.__all_daily_data = None
         current_file_path = os.path.abspath(__file__)
         path = pathlib.Path(current_file_path)
@@ -154,28 +155,33 @@ class DataLoader:
         if data_type not in self.API_TYPE_URL.keys():
             raise ValueError(f'Wrong data_type argument. Must be one of {self.API_TYPE_URL.keys()}')
 
+        body = None
+        
+        self.current_data_file = os.path.join(self.data_dir, f"st-{datetime.datetime.now().date()}.json")
+        if os.path.exists(self.current_data_file):
+            warnings.warn("Data is up-to-date. Using local files.")
+            f = open(self.current_data_file, 'r')
+            body = json.load(f)
+            f.close()
+        else:
+            body = self.__perform_curl(data_type)
+            f = open(self.current_data_file, 'w')
+            json.dump(body, f)
+            f.close()
+
+        if self.__all_timeseries_data is None:
+            self.__all_timeseries_data = self.__process_timeseries_payload(body)
+
         if data_type == 'timeseries':
-            body = None
-            
-            self.current_data_file = os.path.join(self.data_dir, f"st-{datetime.datetime.now().date()}.json")
-            if os.path.exists(self.current_data_file):
-                warnings.warn("Data is up-to-date. Using local files.")
-                f = open(self.current_data_file, 'r')
-                body = json.load(f)
-                f.close()
-            else:
-                body = self.__perform_curl(data_type)
-                f = open(self.current_data_file, 'w')
-                json.dump(body, f)
-                f.close()
-
-            if self.__all_timeseries_data is None:
-                self.__all_timeseries_data = self.__process_timeseries_payload(body)
-
             return self.__all_timeseries_data
         
         if data_type == 'daily':
-            raise NotImplementedError("Daily data processing per district is not implemented in this version")
+            if self.__daily_df is None:
+                columns = self.__all_timeseries_data['TT'].columns
+                self.__daily_df = pd.DataFrame(index=self.__all_timeseries_data.keys(), columns=columns)
+                for key in self.__all_timeseries_data.keys():
+                    self.__daily_df.loc[key] = self.__all_timeseries_data[key].iloc[-1]
+            return self.__daily_df
 
     def __perform_curl(self, data_type: str) -> str:
         URL = self.API_TYPE_URL['timeseries'] if data_type == 'timeseries' else self.API_TYPE_URL['daily']
@@ -217,9 +223,6 @@ class DataLoader:
             key: self.__compute_tpr_cfr(value) for key, value in out_dict.items()
         }
 
-    def __process_daily_payload(self, payload: str) -> typing.Dict[str, pd.DataFrame]:
-        raise NotImplementedError("daily payload processing is not implemented in this version.")
-
     def __state_ts_df(self, state_dict: typing.Dict[str, typing.Dict], population: int) -> pd.DataFrame:
         df = pd.DataFrame(columns=['date'])
         df['date'] = pd.to_datetime(pd.Series(state_dict.keys()))
@@ -235,7 +238,6 @@ class DataLoader:
     def get_all_daily(self):
         return self.__all(data_type='daily')
 
-
     @staticmethod
     def __compute_tpr_cfr(df: pd.DataFrame) -> pd.DataFrame:
         df['tpr'] = 100 * df['delta.confirmed'] / df['delta.tested']
@@ -246,3 +248,4 @@ class DataLoader:
 if __name__ == '__main__':
     dl = DataLoader()
     print(dl.get_all_timeseries())
+    print(dl.get_all_daily())
