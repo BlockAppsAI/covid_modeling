@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
 
 from flask import Flask, send_from_directory
-from tables import Col
 
 from data import *
 from style import *
