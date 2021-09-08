@@ -50,42 +50,40 @@ fig2.add_traces([
 fig2.update_layout(**figure_params_forecasts)
 
 
-tab3_content = html.Div([
+tab3_content = dbc.Container([
     dbc.Row([
-        dbc.Col(
-            html.H5('Karnataka Daily Confirmed Cases Forecast', style={'text-align': 'center'})
-        ),
-        dbc.Col(
-            html.H5('Karnataka Daily Deceased Forecast', style={'text-align': 'center'})
-        ),
-    ]),
-    dbc.Row([
-        dbc.Col(
-            dbc.Spinner(
-                id="loading-confirmed",
-                children=dcc.Graph(
-                    id='confirmed',
-                    animate=False,
-                    style={'width': '90hh', 'height': '75vh'},
-                    figure=fig1
+        dbc.Col([
+            dbc.Row(html.H5('Karnataka Daily Confirmed Cases Forecast', style={'text-align': 'center'})),
+            dbc.Row(
+                dbc.Spinner(
+                    id="loading-confirmed",
+                    children=dcc.Graph(
+                        id='confirmed',
+                        animate=False,
+                        # style={'width': '50hh', 'height': '75vh'},
+                        figure=fig1
+                    ),
+                    spinner_style={'color': "primary", 'type': "grow"},
                 ),
-                spinner_style={'color': "primary", 'type': "grow"},
-            ),
-        ),
-        dbc.Col(
-            dbc.Spinner(
-                id="loading-deaths",
-                children=dcc.Graph(
-                    id='deaths',
-                    animate=False,
-                    style={'width': '90hh', 'height': '75vh'},
-                    figure=fig2
+            )
+        ]),
+        dbc.Col([
+            dbc.Row(html.H5('Karnataka Daily Deceased Cases Forecast', style={'text-align': 'center'})),
+            dbc.Row(
+                dbc.Spinner(
+                    id="loading-deaths",
+                    children=dcc.Graph(
+                        id='death',
+                        animate=False,
+                        # style={'width': '50hh', 'height': '75vh'},
+                        figure=fig2
+                    ),
+                    spinner_style={'color': "primary", 'type': "grow"},
                 ),
-                spinner_style={'color': "primary", 'type': "grow"},
-            ),
-        ),
-    ]),
-], id='tab3-content')
+            )
+        ]),
+    ], no_gutters=True),
+], id='tab3-content', fluid=True)
 
 tab3_body = dbc.Card(
     dbc.CardBody([

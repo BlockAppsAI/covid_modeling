@@ -40,8 +40,8 @@ tab2_content = dbc.Container(children=[
         dbc.ListGroupItem(
             [
                 dbc.ListGroupItemHeading("Versions"),
-                dbc.ListGroupItemText("Dashboard: 0.2"),
-                dbc.ListGroupItemText("Modeling: 0.9")
+                dbc.ListGroupItemText("Dashboard: 0.3"),
+                dbc.ListGroupItemText("Modeling: 0.9.1")
             ]
         ),
         dbc.ListGroupItem(

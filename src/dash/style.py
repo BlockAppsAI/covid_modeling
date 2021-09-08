@@ -34,7 +34,7 @@ xaxis = dict(
         ]
     ),
     rangeslider=dict(
-        visible=True,
+        visible=False,
     ),
     type="date",
     autorange=False,

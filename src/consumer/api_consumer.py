@@ -60,7 +60,7 @@ class DataLoader:
         self.STATES = {v.lower(): k for k, v in self.CODES.items()}
 
         self.__all_timeseries_data = None
-        self.__daily_df = None
+        self.__daily_dfs = None
         # self.__all_daily_data = None
         current_file_path = os.path.abspath(__file__)
         path = pathlib.Path(current_file_path)
@@ -176,12 +176,15 @@ class DataLoader:
             return self.__all_timeseries_data
         
         if data_type == 'daily':
-            if self.__daily_df is None:
+            if self.__daily_dfs is None:
                 columns = self.__all_timeseries_data['TT'].columns
-                self.__daily_df = pd.DataFrame(index=self.__all_timeseries_data.keys(), columns=columns)
+                df_today = pd.DataFrame(index=self.__all_timeseries_data.keys(), columns=columns)
+                df_yesterday = pd.DataFrame(index=self.__all_timeseries_data.keys(), columns=columns)
                 for key in self.__all_timeseries_data.keys():
-                    self.__daily_df.loc[key] = self.__all_timeseries_data[key].iloc[-1]
-            return self.__daily_df
+                    df_today.loc[key] = self.__all_timeseries_data[key].iloc[-1]
+                    df_yesterday.loc[key] = self.__all_timeseries_data[key].iloc[-2]
+                self.__daily_dfs = [df_today, df_yesterday]
+            return self.__daily_dfs
 
     def __perform_curl(self, data_type: str) -> str:
         URL = self.API_TYPE_URL['timeseries'] if data_type == 'timeseries' else self.API_TYPE_URL['daily']

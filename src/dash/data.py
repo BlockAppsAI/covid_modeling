@@ -11,5 +11,4 @@ codes = {value: key for key, value in states.items()}
 states = [{'label': key.title(), 'value': value} for key, value in states.items()]
 
 rtdl = RtDataLoader()
-
 fl = ForecastsLoader()
