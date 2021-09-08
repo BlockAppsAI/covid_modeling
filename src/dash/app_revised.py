@@ -120,7 +120,19 @@ app.layout = html.Div([
                     dcc.Graph(id='case-data', style={'margin-top': -60, "padding": 0})
                 ])
             ], fluid=True, style={'margin': 0, 'padding': 0}),
-            html.Footer(html.H5("Data Last Updated: Sep 08, 2021"))
+            html.Hr(),
+            html.Footer(
+                dbc.Row([
+                    dbc.Col(
+                        html.H5("Data Last Updated: Sep 08, 2021"), 
+                        align='start', width={'size': 4}
+                    ),
+                    dbc.Col(
+                        html.H5("green is good, red is bad!"), 
+                        align='end', width={'size': 4, 'offset': 4}
+                    )
+                ])
+            )
         ]
     ),
     html.Div(
@@ -355,7 +367,10 @@ def get_data_cards(geo):
             go.Indicator(
                 mode="number+delta",
                 value=confirmed_t,
-                delta={'reference': confirmed_y, 'relative': False,},
+                delta={
+                    'reference': confirmed_y,
+                    'relative': False,
+                },
                 domain={
                     'row': i//2,
                     'column': i%2
@@ -377,12 +392,25 @@ def get_data_cards(geo):
     for i, metric in enumerate(case):
         confirmed_t = daily_data_t.loc[geo][metric]
         confirmed_y = daily_data_y.loc[geo][metric]
+
+        delta = {
+            'reference': confirmed_y,
+            'relative': False,
+        }
+
+        if metric in ['delta.confirmed', 'delta.deceased', 'tpr', 'cfr']:
+            delta['decreasing'] = {
+                'color': 'green'
+            }
+            delta['increasing'] = {
+                'color': 'red'
+            }
         
         fig2.add_trace(
             go.Indicator(
                 mode="number+delta",
                 value=confirmed_t,
-                delta={'reference': confirmed_y, 'relative': False,},
+                delta=delta,
                 domain={
                     'row': i//4,
                     'column': i%4
