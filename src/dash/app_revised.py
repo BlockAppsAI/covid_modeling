@@ -91,7 +91,7 @@ app.layout = html.Div([
             dbc.Tab(label='Read Me', tab_id='tab-2'),
         ],
         id="tabs",
-        active_tab="tab-4",
+        active_tab="tab-1",
     ),
     html.Div(
         id="glance-tab",
@@ -124,7 +124,7 @@ app.layout = html.Div([
             html.Footer(
                 dbc.Row([
                     dbc.Col(
-                        html.H5("Data Last Updated: Sep 21, 2021 @ 10:55 AM"), 
+                        html.H5("Data Last Updated: Sep 22, 2021 @ 11:40 AM"), 
                         align='start', width={'size': 4}
                     ),
                     dbc.Col(
