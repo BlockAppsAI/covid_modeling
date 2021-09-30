@@ -101,7 +101,7 @@ app.layout = html.Div([
                     dcc.Dropdown(
                         id='geography-glance',
                         options=states,
-                        value='KA',
+                        value='TT',
                         multi=False,
                         placeholder="Select Geography",
                         style={
@@ -124,7 +124,7 @@ app.layout = html.Div([
             html.Footer(
                 dbc.Row([
                     dbc.Col(
-                        html.H5("Data Last Updated: Sep 27, 2021 @ 11:14 AM"), 
+                        html.H5("Data Last Updated: Sep 30, 2021 @ 11:09 AM"), 
                         align='start', width={'size': 4}
                     ),
                     dbc.Col(
