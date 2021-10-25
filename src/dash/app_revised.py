@@ -80,8 +80,16 @@ def favicon():
     )
 
 
+alert = html.Div(
+    dbc.Alert(
+        "We shall change the data sources after October 31, 2021 due to covid19india.org shutting down its API. Sincere thanks to all volunteers of covid19india.org!",
+        color="primary"
+    )
+)
+
 app.layout = html.Div([
     navbar,
+    alert,
     dbc.Tabs(
         [
             dbc.Tab(label="Day at a Glance", tab_id='tab-4'),
@@ -124,7 +132,7 @@ app.layout = html.Div([
             html.Footer(
                 dbc.Row([
                     dbc.Col(
-                        html.H5("Data Last Updated: Oct 24, 2021 @ 12:17 PM"), 
+                        html.H5("Data Last Updated: Oct 25, 2021 @ 12:17 PM"), 
                         align='start', width={'size': 4}
                     ),
                     dbc.Col(
