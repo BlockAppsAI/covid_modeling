@@ -132,7 +132,7 @@ app.layout = html.Div([
             html.Footer(
                 dbc.Row([
                     dbc.Col(
-                        html.H5("Data Last Updated: Oct 28, 2021 @ 12:25"), 
+                        html.H5("Data Last Updated: Oct 31, 2021 @ 12:30 PM"), 
                         align='start', width={'size': 4}
                     ),
                     dbc.Col(
