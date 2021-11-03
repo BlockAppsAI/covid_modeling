@@ -92,14 +92,14 @@ app.layout = html.Div([
     alert,
     dbc.Tabs(
         [
-            dbc.Tab(label="Day at a Glance", tab_id='tab-4'),
-            dbc.Tab(label="Plots", tab_id="tab-1"), # tabClassName="ml-auto"),
-            dbc.Tab(label='Forecasts', tab_id='tab-3'),
-            dbc.Tab(label='Scenarios', tab_id='tab-5'),
+            # dbc.Tab(label="Day at a Glance", tab_id='tab-4'),
+            # dbc.Tab(label="Plots", tab_id="tab-1"), # tabClassName="ml-auto"),
+            # dbc.Tab(label='Forecasts', tab_id='tab-3'),
+            # dbc.Tab(label='Scenarios', tab_id='tab-5'),
             dbc.Tab(label='Read Me', tab_id='tab-2'),
         ],
         id="tabs",
-        active_tab="tab-4",
+        active_tab="tab-2",
     ),
     html.Div(
         id="glance-tab",
